@@ -6,24 +6,44 @@ using namespace std;
 class Pet {
 protected:
     string name;
-    int age;
+    int age;  
+    double weight;
 
 public:
-    Pet(string name, int age) : name(name), age(age) {}
+    Pet(const string& name, int age, double weight) : name(name), age(age), weight(weight) {}
 
-    virtual void showInfo() const {
-        cout << "Undefined" << endl;
+    virtual void Sound() const {
+        cout << "Unknown animal sound." << endl;
     }
+
+    virtual void Show() const {
+        cout << "Name: " << name << ", Age: " << age << " years, Weight: " << weight << " kg" << endl;
+    }
+
+    virtual void Type() const {
+        cout << "Unknown animal type." << endl;
+    }
+
+    virtual ~Pet() {}
 };
 
 class Dog : public Pet {
     string breed;
 
 public:
-    Dog(string name, int age, string breed) : Pet(name, age), breed(breed) {}
+    Dog(const string& name, int age, double weight, const string& breed): Pet(name, age, weight), breed(breed) {}
 
-    void showInfo() const {
-        cout << "Dog\nName: " << name << "\nAge: " << age << " years\nBreed: " << breed << endl;
+    void Sound() const {
+        cout << name << " says: Woof!" << endl;
+    }
+
+    void Type() const {
+        cout << name << " is a Dog of breed: " << breed << endl;
+    }
+
+    void Show() const {
+        Pet::Show();
+        cout << "Breed: " << breed << endl;
     }
 };
 
@@ -31,49 +51,79 @@ class Cat : public Pet {
     string color;
 
 public:
-    Cat(string name, int age, string color) : Pet(name, age), color(color) {}
+    Cat(const string& name, int age, double weight, const string& color)
+        : Pet(name, age, weight), color(color) {}
 
-    void showInfo() const {
-        cout << "Cat\nName: " << name << "\nAge: " << age << " years\nColor: " << color << endl;
+    void Sound() const {
+        cout << name << " says: Meow!" << endl;
+    }
+
+    void Type() const {
+        cout << name << " is a Cat of color: " << color << endl;
+    }
+
+    void Show() const {
+        Pet::Show();
+        cout << "Color: " << color << endl;
     }
 };
 
 class Parrot : public Pet {
-    string species;
+    string favorite_food; 
 
 public:
-    Parrot(string name, int age, string species) : Pet(name, age), species(species) {}
+    Parrot(const string& name, int age, double weight, const string& favorite_food): Pet(name, age, weight), favorite_food(favorite_food) {}
 
-    void showInfo() const {
-        cout << "Parrot\nName: " << name << "\nAge: " << age << " years\nSpecies: " << species << endl;
+    void Sound() const {
+        cout << name << " says: Squawk!" << endl;
+    }
+
+    void Type() const {
+        cout << name << " is a Parrot." << endl;
+    }
+
+    void Show() const {
+        Pet::Show(); 
+        cout << "Favorite food: " << favorite_food << endl;
     }
 };
 
 class Hamster : public Pet {
-    double weight;
+    bool is_nocturnal; 
 
 public:
-    Hamster(string name, int age, double weight) : Pet(name, age), weight(weight) {}
+    Hamster(const string& name, int age, double weight, bool is_nocturnal): Pet(name, age, weight), is_nocturnal(is_nocturnal) {}
 
-    void showInfo() const {
-        cout << "Hamster\nName: " << name << "\nAge: " << age << " years\nWeight: " << weight << " kg" << endl;
+    void Sound() const {
+        cout << name << " says: Squeak!" << endl;
+    }
+
+    void Type() const {
+        cout << name << " is a Hamster." << endl;
+    }
+
+    void Show() const {
+        Pet::Show();
+        cout << "Is nocturnal: " << (is_nocturnal ? "Yes" : "No") << endl;
     }
 };
 
 int main() {
-    Pet* pets[4];
+    Pet* pets[] = {
+        new Dog("Buddy", 3, 20.5, "Golden Retriever"),
+        new Cat("Whiskers", 2, 4.3, "Black"),
+        new Parrot("Polly", 5, 1.2, "Seeds"),
+        new Hamster("Nibbles", 1, 0.3, true)
+    };
 
-    pets[0] = new Dog("Buddy", 5, "Golden Retriever");
-    pets[1] = new Cat("Whiskers", 3, "Gray");
-    pets[2] = new Parrot("Polly", 2, "Macaw");
-    pets[3] = new Hamster("Nibbles", 1, 0.25);
-
-    for (int i = 0; i < 4; i++) {
-        pets[i]->showInfo(); 
+    for (int i = 0; i < 4; ++i) {
+        pets[i]->Show();
+        pets[i]->Type();
+        pets[i]->Sound();
         cout << endl;
     }
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
         delete pets[i];
     }
 
